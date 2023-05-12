@@ -1,0 +1,35 @@
+void patience_sort(int arr[], int n) {
+    vector<stack<int>> piles;
+    for (int i = 0; i < n; i++) {
+        int item = arr[i];
+        bool placed = false;
+        for (int j = 0; j < piles.size(); j++) {
+            if (item <= piles[j].top()) {
+                piles[j].push(item);
+                placed = true;
+                break;
+            }
+        }
+        if (!placed) {
+            stack<int> new_pile;
+            new_pile.push(item);
+            piles.push_back(new_pile);
+        }
+    }
+    int i = 0;
+    while (!piles.empty()) {
+        arr[i] = piles[0].top();
+        piles[0].pop();
+        if (piles[0].empty()) {
+            piles.erase(piles.begin());
+        } else {
+            int j = 1;
+            while (j < piles.size() && piles[j].top() < arr[i]) {
+                j++;
+            }
+            piles[j-1].push(piles[j].top());
+            piles[j].pop();
+        }
+        i++;
+    }
+}
